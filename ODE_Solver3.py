@@ -101,6 +101,11 @@ def run_model():
     print("C =", C[-1])
     print("D =", D[-1])
 
+    # check it has actually settled, otherwise the "final" values arent steady state
+    rates = ar_odes(t[-1], [P[-1], C[-1], D[-1]], *params, S)
+    if max(abs(r) for r in rates) > 1e-3:
+        print("Warning: not at steady state yet, try a longer end time")
+
 def run_sweep(params, S_values, t_end):
     # runs the model once per S value and returns the final P, C, D arrays
     # (pulled out into its own function so we can reuse it for the comparison plot)
